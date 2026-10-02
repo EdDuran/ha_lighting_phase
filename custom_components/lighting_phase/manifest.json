@@ -1,0 +1,11 @@
+{
+  "domain": "lighting_phase",
+  "name": "Lighting Phase",
+  "codeowners": [],
+  "config_flow": true,
+  "documentation": "https://github.com/EdDuran/ha_lighting_phase",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/EdDuran/ha_lighting_phase/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}

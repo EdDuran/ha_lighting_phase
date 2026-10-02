@@ -1,0 +1,70 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Lighting Phase - Setup",
+        "description": "Set up one zone. You can add more Lighting Phase zones later, each with its own name, lux sensor (or elevation-only) and thresholds.",
+        "data": {
+          "name": "Zone name (e.g. \"Backyard\", \"Front Porch\")",
+          "lux_sensor": "Lux sensor (optional)",
+          "notify_target": "Notify service target (e.g. mobile_app_your_phone, blank to disable)",
+          "phase_sound": "Phase-change notification sound (optional)"
+        }
+      },
+      "lux_thresholds": {
+        "title": "Lux Thresholds",
+        "description": "Illuminance level (lux) at which each phase transitions to the next. These become number entities you can retune later without reconfiguring.",
+        "data": {
+          "lux_dawn": "Dawn \u2192 Morning",
+          "lux_morning": "Morning \u2192 Day",
+          "lux_day": "Day \u2192 Afternoon",
+          "lux_afternoon": "Afternoon \u2192 Dusk",
+          "lux_dusk": "Dusk \u2192 Night",
+          "lux_night": "Night \u2192 Dawn"
+        }
+      },
+      "elevation_thresholds": {
+        "title": "Sun Elevation Thresholds",
+        "description": "Sun elevation (degrees) used in calculated mode, and as a cross-check against the lux sensor.",
+        "data": {
+          "elev_dawn": "Dawn \u2192 Morning",
+          "elev_morning": "Morning \u2192 Day",
+          "elev_day": "Day \u2192 Afternoon",
+          "elev_afternoon": "Afternoon \u2192 Dusk",
+          "elev_dusk": "Dusk \u2192 Night",
+          "elev_night": "Night \u2192 Dawn",
+          "elev_tolerance": "Elevation cross-check tolerance (degrees)"
+        }
+      },
+      "storm": {
+        "title": "Storm / Transient Darkness Overlay",
+        "data": {
+          "storm_lux_percent": "Storm cutoff (% of recent rolling peak lux)",
+          "delay_darkening_minutes": "Debounce - darkening transitions (minutes)",
+          "delay_brightening_minutes": "Debounce - brightening transitions (minutes)",
+          "storm_window_minutes": "Rolling window for storm detection (minutes)",
+          "storm_enter_delay_seconds": "Delay before entering storm mode (seconds)",
+          "storm_exit_delay_seconds": "Delay before exiting storm mode (seconds)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Lighting Phase - Options",
+        "description": "Threshold values are adjustable directly on their own number entities. These settings require a reload to take effect.",
+        "data": {
+          "lux_sensor": "Lux sensor (optional)",
+          "notify_target": "Notify service target",
+          "phase_sound": "Phase-change notification sound",
+          "delay_darkening_minutes": "Debounce - darkening transitions (minutes)",
+          "delay_brightening_minutes": "Debounce - brightening transitions (minutes)",
+          "storm_window_minutes": "Rolling window for storm detection (minutes)",
+          "storm_enter_delay_seconds": "Delay before entering storm mode (seconds)",
+          "storm_exit_delay_seconds": "Delay before exiting storm mode (seconds)"
+        }
+      }
+    }
+  }
+}

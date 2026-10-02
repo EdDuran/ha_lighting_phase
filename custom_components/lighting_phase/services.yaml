@@ -1,0 +1,29 @@
+set_phase:
+  name: Set Lighting Phase
+  description: >-
+    Manually override the current lighting phase for one zone. Intended as
+    an emergency override only - normal operation lets the integration
+    compute the phase automatically from that zone's lux sensor or sun
+    elevation, and it will simply resume computing forward from whatever
+    phase you set.
+  fields:
+    device_id:
+      name: Zone
+      description: Which Lighting Phase zone/device to override.
+      required: true
+      selector:
+        device:
+          integration: lighting_phase
+    phase:
+      name: Phase
+      description: The phase to force.
+      required: true
+      selector:
+        select:
+          options:
+            - dawn
+            - morning
+            - day
+            - afternoon
+            - dusk
+            - night

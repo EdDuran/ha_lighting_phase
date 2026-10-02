@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace_dashboards",
+  "data": {
+    "items": [
+      {
+        "id": "dashboard_lighting_phase",
+        "show_in_sidebar": true,
+        "title": "Lighting Phase",
+        "require_admin": false,
+        "mode": "storage",
+        "url_path": "dashboard-lighting-phase"
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+    "python.defaultInterpreterPath": "/usr/local/bin/python3",
+    "python.analysis.extraPaths": [
+        "/usr/src/homeassistant",
+        "/usr/local/lib/python3.14/site-packages"
+    ],
+    "git.ignoreLimitWarning": true,
+    "python.analysis.typeCheckingMode": "off"
+}

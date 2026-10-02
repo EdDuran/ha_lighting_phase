@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach to HA/Container",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "justMyCode": false,
+            "pathMappings": [
+                {
+                    "localRoot": "/workspaces/ha_lighting_phase/custom_components/lighting_phase",
+                    "remoteRoot": "/config/custom_components/lighting_phase"
+                }
+            ]
+        }
+    ]
+}

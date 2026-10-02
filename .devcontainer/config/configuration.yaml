@@ -1,0 +1,32 @@
+### default_config:
+
+logger:
+  default: info
+  logs:
+    custom_components.lighting_phase: debug
+homeassistant:
+  time_zone: America/New_York
+
+assist_pipeline:
+conversation:
+dhcp:
+energy:
+file:
+go2rtc:
+history:
+homeassistant_alerts:
+cloud:
+logbook:
+media_source:
+mobile_app:
+my:
+ssdp:
+stream:
+sun:
+usage_prediction:
+usb:
+webhook:
+zeroconf:
+
+config:
+frontend:
