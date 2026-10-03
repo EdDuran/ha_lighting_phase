@@ -1,47 +1,57 @@
 # Lighting Phase (custom integration)
 
-A native Home Assistant replacement for the `lighting_phase.py` pyscript.
-Instead of manually-created `input_select` / `input_number` helpers, setup
-and threshold values live on real integration entities under a device.
+![icon](https://github.com/user-attachments/assets/8f66415a-69fe-4664-a994-b8f59355fbd0)
 
-**Multiple zones are supported.** Add the integration more than once (each
-run of the config flow is a separate zone/instance) to get, e.g., a
+A native Home Assistant Integration to detect Lighting Phase changes based
+on a Lux Sensor entity value or the Sun's Elevation at your location. The Lux sensor
+is optional. If omitted the Lighting Phase is based purely on Sun Elevation.
+If the Lux sensor is used and it goes offline (ie, battery dies) the mode is
+automatically changed to Elevation.
+
+Automations can then be created which react to the Lighting Phase change.
+
+* Afternoon: Turn on interior lights
+* Dusk: Turn on exterior lights
+* Dawn: Turn off exterior lights
+* Morning: Turn off interior lights which could have been turned on manually
+
+**Multiple zones are supported.** The integration supports multiple Devices.
+Each Device has its own independent config flow to provide separate zones; e.g., a
 "Backyard" zone off one lux sensor and a "Front Porch" zone off another (or
 elevation-only), each with its own device, entities, and thresholds,
 running completely independently.
 
-## What you get
+**Storm Mode** The integration also provides a Storm Mode to determine when it has
+become darker outside when not typically expected. This could trigger an automation to turn on
+some interior lights (and restore them when Storm Mode is over. Generally using a scene).
+
+## What you get per Lighting Phase Device
 
 | Entity | Type | Notes |
 |---|---|---|
-| `sensor.lighting_phase` | Sensor (enum) | Read-only in normal operation. `dawn / morning / day / afternoon / dusk / night`. |
-| `select.lighting_mode` | Select | `sensor` or `elevation`. User-settable; also auto-switched to `elevation` if the lux sensor drops out. |
-| `binary_sensor.storm_dark_mode` | Binary sensor | Read-only, computed. Your automations react to this the same way they reacted to `input_boolean.storm_mode`. |
+| `sensor.lighting_phase` | Sensor (enum) | Read-only in normal operation; `dawn / morning / day / afternoon / dusk / night`. |
+| `select.lighting_mode` | Select |  User-settable; `sensor` or `elevation`. Also auto-switched to `elevation` if the lux sensor drops out. |
+| `binary_sensor.storm_mode` | Binary sensor | Read-only |
 | `number.*` (14 entities) | Number | All lux, elevation, tolerance and storm-percent thresholds. Seeded at setup, freely adjustable afterwards from Lovelace/Settings, and persist across restarts. |
 
-A service, **`lighting_phase.set_phase`**, is provided as the "if something
-goes wrong" manual override (Developer Tools > Services, or call it from an
-automation/script). It takes a **Zone** (device picker — pick which zone's
-device this applies to) and a **Phase**. The coordinator for that zone
-simply resumes computing forward from whatever phase you force it to; other
-zones are untouched.
+| Service | Notes |
+|---|---|
+| `lighting_phase.set_phase` | Provided as the "if something goes wrong" manual override (Developer Tools > Services, or call it from an automation/script). It takes a **Zone** (device picker — pick which zone's device this applies to) and a **Phase**. The Zone simply resumes computing forward from whatever phase you force it to; other Zones are untouched. |
 
 ## Install
 
-1. Copy the `custom_components/lighting_phase` folder into your Home
-   Assistant `config/custom_components/` directory (via Samba, SSH, or the
-   Studio Code Server add-on).
-2. Restart Home Assistant.
-3. Settings → Devices & Services → **Add Integration** → search
-   "Lighting Phase".
-4. Walk through the 4-step setup for this zone:
+1. Add the custom repository to HACS: `https://github.com/EdDuran/ha_lighting_phase.git`
+2. Settings → Devices & Services → **Add Integration** → search "Lighting Phase".
+3. Restart Home Assistant
+4. Settings → Devices & Services → Lighting Phase and **Add Entity**
+5. Walk through the 4-step setup for this zone:
    - **Zone name** (e.g. "Backyard"), lux sensor (optional — leave blank to
      run elevation-only), notify target, phase-change sound.
    - Lux thresholds (dawn/morning/day/afternoon/dusk/night).
    - Elevation thresholds + cross-check tolerance.
    - Storm overlay % + debounce/window/delay timing.
-5. Done — a device named after your zone appears with all entities above.
-6. **Repeat from step 3** for each additional zone. Every run of the config
+6. Done — a Device named after your Zone appears with all entities above.
+7. **Repeat from step 4** for each additional zone. Every run of the config
    flow creates a fully independent instance — its own device, entities,
    coordinator, and lux sensor (or none, for elevation-only).
 
@@ -50,29 +60,7 @@ be changed later from that zone's **Configure** button (options flow).
 Threshold *values* don't need that — just edit that zone's number entities
 directly.
 
-## Migrating from the pyscript version
-
-- Delete/disable `lighting_phase.py` from `<config>/pyscript/` (or just stop
-  loading it) once this integration is running, so you don't have two things
-  competing over the same physical lights.
-- Old entity IDs (`input_select.lighting_phase_2`,
-  `input_number.lux_dawn`, etc.) are **not** reused — this integration's
-  entities have their own IDs, prefixed with whatever zone name you gave
-  the instance (e.g. `sensor.backyard_lighting_phase`,
-  `number.backyard_lighting_phase_lux_dawn`). Update any
-  dashboards/automations that referenced the old helpers.
-- The pyscript only ever ran one instance. If you want that to become more
-  than one zone, set up each zone separately and split your old threshold
-  values across them as appropriate.
-- Port your old helper values over: open each `number.*` entity for this
-  integration and set it to match what your old `input_number` held (or
-  just re-set them to your tuned values — they were seeded with placeholder
-  defaults during setup).
-- `NOTIFY_TARGET` from the script maps to the integration's `notify_target`
-  option — same convention: whatever comes after `notify.` (e.g.
-  `mobile_app_keith_s_iphone_17`).
-
-## Design notes / where this differs from the pyscript
+## Design notes
 
 - **Debounce state doesn't persist.** Like the original (module-level dict,
   reset on reload), a pending-but-unconfirmed transition is lost on HA
@@ -86,11 +74,3 @@ directly.
   live lux reading is.
 - **Storm rolling-window samples** are kept in memory only (matching the
   original's `_lux_samples` module list) and reset on reload/restart.
-
-## Not covered here
-
-This integration only reproduces the pyscript's *state machine*. Whatever
-automations/scripts you had that reacted to `input_select.lighting_phase_2`
-changing (turning lights on/off, adjusting scenes, etc.) still need to be
-repointed at the new `sensor.lighting_phase` entity — that logic was never
-part of the pyscript file you shared, so there was nothing here to port.
