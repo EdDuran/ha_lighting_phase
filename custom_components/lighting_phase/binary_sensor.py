@@ -23,7 +23,7 @@ class LightingPhaseStormBinarySensor(RestoreEntity, BinarySensorEntity):
     """Computed, read-only. Interior lights/automations react to this."""
 
     _attr_has_entity_name = True
-    _attr_name = "Storm Dark Mode"
+    _attr_name = "Storm Mode"
     _attr_icon = "mdi:weather-lightning"
 
     def __init__(self, coordinator: LightingPhaseCoordinator, entry: ConfigEntry) -> None:

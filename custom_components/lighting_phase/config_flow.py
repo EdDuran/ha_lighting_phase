@@ -138,7 +138,7 @@ class LightingPhaseConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     def async_get_options_flow(
         config_entry: config_entries.ConfigEntry,
     ) -> "LightingPhaseOptionsFlow":
-        return LightingPhaseOptionsFlow(config_entry)
+        return LightingPhaseOptionsFlow()
 
 
 class LightingPhaseOptionsFlow(config_entries.OptionsFlow):
@@ -149,8 +149,10 @@ class LightingPhaseOptionsFlow(config_entries.OptionsFlow):
     they are intentionally not repeated here.
     """
 
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        self.config_entry = config_entry
+    # No __init__ override: current HA core exposes `self.config_entry` as
+    # a read-only property on OptionsFlow, resolved automatically from the
+    # flow's own entry id. Assigning to it (the old pre-2024.12 pattern)
+    # now raises AttributeError, so it's intentionally left alone here.
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
         if user_input is not None:
