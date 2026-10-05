@@ -1,7 +1,6 @@
-<p align="left">
-  <img src="brand/logo.png" alt="Lighting Phase" width="300">
+<img width="300" alt="logo" src="https://github.com/user-attachments/assets/bada1272-7d26-4025-9c2f-94e601c0234e" />
 </p>
-<h13align="center">2026, EdDuran @ Strebor Tech</h3>
+<h3 align="left">2026, EdDuran @ Strebor Tech</h3>
 <p></p>
 
 **Lighting Phase** is a native Home Assistant Integration that converts Lux (light) Sensor values
@@ -29,6 +28,10 @@ become appreciably darker out when not typically expected; like when a storm app
 The Storm Mode entity can trigger your automation to turn on some interior lights and restore
 them when Storm Mode is over; generally using a scene.
 
+## Zone "Front Door" Example Dashboard
+
+<img width="1038" height="697" alt="Lighting Phase Dashboard" src="https://github.com/user-attachments/assets/6c6813fb-8f51-4551-935b-46e32ce05fd7" />
+
 ## Install
 
 1. Add the custom repository to HACS: `https://github.com/EdDuran/ha_lighting_phase.git`
@@ -41,7 +44,7 @@ them when Storm Mode is over; generally using a scene.
    - Lux thresholds (dawn/morning/day/afternoon/dusk/night).
    - Elevation thresholds + cross-check tolerance.
    - Storm overlay % + debounce/window/delay timing.
-6. Done — a Device named after your Zone appears with all entities above.
+6. Done — a Device named after your Zone appears with all entities below.
 7. **Repeat from step 4** for each additional zone. Every run of the new entry's config
    flow creates a fully independent Lighting Phase instance — its own device, entities (referencing
    Lux Sensor, or none, for elevation-only).
@@ -57,7 +60,7 @@ for each zone's number entities directly.
 | `sensor.{ZONE}_lighting_phase` | Read-only in normal operation; `dawn / morning / day / afternoon / dusk / night`. |
 | `select.{ZONE}_lighting_mode` |  Settable; `sensor` or `elevation`. Auto-switched to `elevation` if the Lux Sensor drops out. |
 | `binary_sensor.{ZONE}_storm_mode` | Read-only; Set when Storm detection occurs |
-| `number.{ZONE}_storm_detection_rolling_peak` | Settable; Percent of 'rolling window' at which Storm Mode is enabled |
+| `number.{ZONE}_storm_detection_rolling_peak` | Settable; Percent of 'rolling window' at which Storm Mode is triggered |
 | `number.{ZONE}_lux_dawn` | Settable; The Lux value at which Dawn occurs | 
 | `number.{ZONE}_lux_morning` | Settable; The Lux value at which Morning occurs |
 | `number.{ZONE}_lux_day` | Settable; The Lux value at which Day occurs | 
@@ -95,7 +98,10 @@ These options are settable from Settings → Devices & Services → Lighting Pha
 
 ## How does Storm Mode work?
 
-* The maximum Lux value is retained over the Zone Option **Storm detection rolling window** (e.g., 30 minutes)
-* Storm Mode enabled - When the Lux value drops below entity `number.{ZONE}_storm_detection_rolling_peak` percent (e.g., 50%) of the maximum for Option **Darkening transition** minutes (e.g., 1 minute) for Option **Delay before entering Storm Mode** seconds (e.g., 90 seconds)
-* Storm Mode disabled - When the Lux value rises over the rolling peak for Option **Brightening transition** minutes (e.g, 2 minutes) for **Delay before exiting Storm Mode** seconds (e.g. 300 seconds).
+1. The maximum Lux value is retained over the last N minutes window: See **Storm detection rolling window**
+2. Storm Mode is *triggered* when the Lux value drops below N percent of that maximum Lux value. See `number.{ZONE}_storm_detection_rolling_peak`
+3. Storm Mode is *On*, when:
+   - it remains triggered for N seconds. See **Delay before entering Storm Mode**
+4. Storm Mode is *Off*, when
+   - the Lux value rises over the max Lux peak. See **Delay before exiting Storm Mode**
 
