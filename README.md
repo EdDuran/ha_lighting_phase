@@ -34,7 +34,8 @@ them when Storm Mode is over; generally using a scene.
 
 ## Install
 
-1. Add the custom repository to HACS: `https://github.com/EdDuran/ha_lighting_phase.git`
+Install HACS if you haven't already. [See installation guide](https://www.hacs.xyz/docs/use/download/download/)
+1. Add custom repository `https://github.com/EdDuran/ha_lighting_phase.git` as "Integration" in the settings tab of HACS.
 2. Go to: Settings → Devices & Services → **Add Integration** → and search for "Lighting Phase".
 3. Restart Home Assistant
 4. Go to: Settings → Devices & Services → Lighting Phase and **Add Entry**
