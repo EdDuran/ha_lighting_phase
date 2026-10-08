@@ -6,9 +6,7 @@
 **Lighting Phase** is a native Home Assistant Integration that converts Lux (light) Sensor values
 .. or the Sun's Elevation at your location .. to an enumeration (HA speak, "select" entity) which
 identifies: `Dawn, Morning, Day, Afternoon, Dusk, Night` lighting phases. Automations can then be
-created which react to the lighting phase change.
-
-Automations can then be created which react to the Lighting Phase change, for example:
+created which react to the lighting phase change, for example:
 
 * `Afternoon`: Turn on interior lights
 * `Dusk`: Turn on exterior lights
@@ -26,7 +24,7 @@ device, entities, and thresholds, running completely independently of one anothe
 **Storm Mode** Lighting Phase also provides a Storm Mode to detect when it has
 become appreciably darker out when not typically expected; like when a storm approaches.
 The Storm Mode entity can trigger your automation to turn on some interior lights and restore
-them when Storm Mode is over; generally using a scene.
+them when Storm Mode is over; generally creating a scene which can later be restored.
 
 ## Zone "Front Door" Example Dashboard
 
@@ -104,5 +102,5 @@ These options are settable from Settings → Devices & Services → Lighting Pha
 3. Storm Mode is *On*, when:
    - it remains triggered for N seconds. See **Delay before entering Storm Mode**
 4. Storm Mode is *Off*, when
-   - the Lux value rises over the max Lux peak. See **Delay before exiting Storm Mode**
+   - the Lux value rises over the max Lux peak for N seconds. See **Delay before exiting Storm Mode**
 
